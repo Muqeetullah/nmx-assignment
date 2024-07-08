@@ -5,73 +5,114 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import AdminDashboard from "../containers/Auth/Admin/AdminDashboard";
+import AdminDashboard from "../containers/Admin/AdminDashboard";
 import SignIn from "../containers/Auth/SignIn";
-import UserLisitng from "../containers/Auth/Admin/UserLisitng";
-import BookLisitng from "../containers/Auth/Admin/BookLisitng";
-import AddUser from "../containers/Auth/Admin/AddUser";
-import AddBook from "../containers/Auth/Admin/AddBook";
-import PrivateRoute from "./PrivateRoutes";
-import ViewProfile from "../containers/Auth/Admin/ViewProfile";
+import UserLisitng from "../containers/Admin/UserLisitng";
+import BookLisitng from "../containers/Admin/BookLisitng";
+import AddUser from "../containers/Admin/AddUser";
+import AddBook from "../containers/Admin/AddBook";
+
+import ViewProfile from "../containers/Admin/ViewProfile";
 import UsersWithBooksLisitng from "../containers/Shared/UsersWithBooksLisitng";
-import Sidebar from "../components/Sidebar";
+
 import Layout from "../containers/Shared/Layout";
+import IssueBook from "../containers/User/IssueBook";
+import PrivateRoute from "./PrivateRoutes";
+import PublicRoutes from "./PublicRoutes";
 
 const AppRoutes: React.FC = () => {
   return (
     <Router>
       <Routes>
         {/* Public Routes */}
+
+        <Route
+          path="/login"
+          element={
+            <PublicRoutes>
+              <SignIn />
+            </PublicRoutes>
+          }
+        />
+
+        {/* Private Routes */}
         <Route
           path="/"
           element={
-            <Layout>
-              <AdminDashboard />
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <AdminDashboard />
+              </Layout>
+            </PrivateRoute>
           }
         />
-        <Route path="/login" element={<SignIn />} />
         <Route
           path="/admin/view-user-list"
           element={
-            <Layout>
-              <UserLisitng />
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <UserLisitng />
+              </Layout>
+            </PrivateRoute>
           }
         />
         <Route
           path="/admin/view-book-list"
           element={
-            <Layout>
-              <BookLisitng />
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <BookLisitng />
+              </Layout>
+            </PrivateRoute>
           }
         />
         <Route
           path="/admin/add-user"
           element={
-            <Layout>
-              <AddUser />{" "}
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <AddUser />
+              </Layout>
+            </PrivateRoute>
           }
         />
         <Route
           path="/admin/add-book"
           element={
-            <Layout>
-              <AddBook />{" "}
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <AddBook />
+              </Layout>
+            </PrivateRoute>
           }
         />
         <Route
           path="/view-issued-book-list"
-          element={<UsersWithBooksLisitng />}
+          element={
+            <PrivateRoute>
+              <Layout>
+                <UsersWithBooksLisitng />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/view-issued-book-list/issue-book"
+          element={
+            <PrivateRoute>
+              <Layout>
+                <IssueBook />
+              </Layout>
+            </PrivateRoute>
+          }
         />
         <Route
           path="/admin/profile"
           element={
             <PrivateRoute>
-              <ViewProfile />
+              <Layout>
+                <ViewProfile />
+              </Layout>
             </PrivateRoute>
           }
         />

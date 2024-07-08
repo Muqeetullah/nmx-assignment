@@ -1,4 +1,6 @@
 import React, { FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface SignInProps {}
 
@@ -6,12 +8,36 @@ const SignIn: React.FC<SignInProps> = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (email === "admin@example.com" && password === "password") {
-      window.location.href = "/admin/dashboard";
+
+    if (email === "user@gmail.com" && password === "1234") {
+      const user = {
+        token: "123123",
+        role: "user",
+        name: "User",
+        email: "user@example.com",
+      };
+      localStorage.setItem("user", JSON.stringify(user));
+
+      navigate("/");
+
+      toast.success("Login successful");
+    } else if (email === "admin@gmail.com" && password === "1234") {
+      const admin = {
+        token: "123123",
+        role: "admin",
+        name: "Admin",
+        email: "admin@example.com",
+      };
+      localStorage.setItem("user", JSON.stringify(admin));
+      navigate("/");
+
+      toast.success("Login successful");
     } else {
+      toast.error("Invalid credentials");
       setError("Invalid credentials");
     }
   };

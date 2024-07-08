@@ -1,11 +1,11 @@
 import React from 'react';
 
-function AddUser() {
+function IssueBook() {
   return (
     <div>
-      AddUser
+      IssueBook
     </div>
   );
 }
 
-export default AddUser;
+export default IssueBook;

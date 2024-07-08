@@ -25,10 +25,26 @@ const UsersWithBooksListing = () => {
       ],
     },
   ];
+  const issueBook = () => {
+    console.log("Issue book");
+  };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
-      <div className="bg-white shadow-md rounded-lg overflow-hidden max-w-4xl w-full">
+    <div className="w-full px-4 sm:px-6 lg:px-8 mt-10">
+      <div className="flex flex-col sm:flex-row items-center justify-between pb-6 sm:pb-10">
+        <h1 className="text-xl font-bold text-gray-900 mb-4 sm:mb-0">
+          Users with Books
+        </h1>
+        {/* <div>
+          <button
+            className="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={issueBook}
+          >
+            Issue Book
+          </button>
+        </div> */}
+      </div>
+      <div className="bg-white shadow-md rounded-lg overflow-hidden w-full">
         <table className="w-full">
           <thead>
             <tr className="bg-gray-200">

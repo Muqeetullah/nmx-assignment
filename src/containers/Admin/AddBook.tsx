@@ -1,81 +1,105 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useBook } from "../../context/BookContext";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface Book {
+  id?: number;
   name: string;
   author: string;
   genre: string;
-  price: string;
+  price: number;
 }
 
-const initialBooks: Book[] = [
-  {
-    name: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    genre: "Fiction",
-    price: "$10",
-  },
-  {
-    name: "To Kill a Mockingbird",
-    author: "Harper Lee",
-    genre: "Classics",
-    price: "$12",
-  },
-  {
-    name: "Harry Potter and the Philosopher's Stone",
-    author: "J.K. Rowling",
-    genre: "Fantasy",
-    price: "$15",
-  },
-];
-
 const AddBook: React.FC = () => {
-  const [books, setBooks] = useState<Book[]>(initialBooks);
   const [newBook, setNewBook] = useState<Book>({
+    id: undefined,
     name: "",
     author: "",
     genre: "",
-    price: "",
+    price: 0,
   });
+  const [status, setStatus] = useState<string>("");
+  const { addBook, updateBook } = useBook();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [errors, setErrors] = useState<string[]>([]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     fieldName: keyof Book
   ) => {
-    setNewBook({ ...newBook, [fieldName]: e.target.value });
+    const value =
+      fieldName === "price" ? parseFloat(e.target.value) : e.target.value;
+    setNewBook({ ...newBook, [fieldName]: value });
   };
 
-  const addBook = () => {
-    if (!newBook.name || !newBook.author || !newBook.genre || !newBook.price) {
-      alert("Please fill in all fields.");
+  const handleAddOrUpdateBook = () => {
+    let currentErrors = [];
+
+    if (!newBook.name) {
+      currentErrors.push("Book title is required.");
+    }
+
+    if (!newBook.author) {
+      currentErrors.push("Author is required.");
+    }
+
+    if (!newBook.genre) {
+      currentErrors.push("Genre is required.");
+    }
+
+    if (newBook.price <= 0 || isNaN(newBook.price)) {
+      currentErrors.push("Price must be a positive number.");
+    }
+
+    if (currentErrors.length > 0) {
+      setErrors(currentErrors);
       return;
     }
 
-    const bookToAdd: Book = {
-      name: newBook.name,
-      author: newBook.author,
-      genre: newBook.genre,
-      price: `$${newBook.price}`,
-    };
+    if (status === "Edit") {
+      updateBook(newBook);
+    } else {
+      addBook(newBook);
+    }
 
-    setBooks([...books, bookToAdd]);
+    navigate("/admin/view-book-list");
     setNewBook({
       name: "",
       author: "",
       genre: "",
-      price: "",
+      price: 0,
     });
+    setErrors([]);
   };
 
+  useEffect(() => {
+    if (location.state) {
+      setStatus(location.state.status);
+      setNewBook(location.state.book as Book);
+    }
+  }, [location.state]);
+
   return (
-    <div className="w-full  lg:max-w-xl  mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-xl font-bold text-gray-900 mb-6">Add a New Book</h1>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          addBook();
-        }}
-      >
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <div className="flex w-full items-center justify-center mt-10">
+      <div className="mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+        <h1 className="text-xl font-bold text-gray-900 mb-6">Add a New Book</h1>
+        {errors.length > 0 && (
+          <div className="mb-4">
+            {errors.map((error, index) => (
+              <div key={index} className="text-red-600">
+                {error}
+              </div>
+            ))}
+          </div>
+        )}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleAddOrUpdateBook();
+          }}
+          className="grid grid-cols-1 gap-4 md:grid-cols-2"
+        >
           <div>
             <label
               htmlFor="name"
@@ -135,7 +159,7 @@ const AddBook: React.FC = () => {
               Price
             </label>
             <input
-              type="text"
+              type="number"
               id="price"
               name="price"
               value={newBook.price}
@@ -144,17 +168,16 @@ const AddBook: React.FC = () => {
               required
             />
           </div>
-        </div>
-
-        <div className="mt-6 flex justify-end">
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-          >
-            Add Book
-          </button>
-        </div>
-      </form>
+          <div className="col-span-2 mt-6 flex justify-end">
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            >
+              {status === "Edit" ? "Update Book" : "Add Book"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
