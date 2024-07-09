@@ -19,8 +19,15 @@ import Layout from "../containers/Shared/Layout";
 import IssueBook from "../containers/User/IssueBook";
 import PrivateRoute from "./PrivateRoutes";
 import PublicRoutes from "./PublicRoutes";
+import UserDashboard from "../containers/User/UserDashboard";
 
 const AppRoutes: React.FC = () => {
+  const jsonString = localStorage.getItem("user");
+  const jsonObject = JSON.parse(jsonString);
+  const role = jsonObject.role;
+
+  console.log(role); // Output: user
+
   return (
     <Router>
       <Routes>
@@ -41,7 +48,7 @@ const AppRoutes: React.FC = () => {
           element={
             <PrivateRoute>
               <Layout>
-                <AdminDashboard />
+                {role === "admin" ? <AdminDashboard /> : <UserDashboard />}
               </Layout>
             </PrivateRoute>
           }
