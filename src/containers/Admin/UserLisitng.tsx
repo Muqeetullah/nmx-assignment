@@ -20,7 +20,7 @@ const UserListing = () => {
     navigate("/admin/add-user");
   };
 
-  const handleEditUser = (user) => {
+  const handleEditUser = (user: any) => {
     navigate(`/admin/add-user`, {
       state: { user: user, status: "Edit" },
     });

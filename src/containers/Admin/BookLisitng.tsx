@@ -19,7 +19,7 @@ const BookLisitng = () => {
     navigate("/admin/add-book");
   };
 
-  const handleEditUser = (book) => {
+  const handleEditUser = (book: any) => {
     navigate(`/admin/add-book`, {
       state: { book: book, status: "Edit" },
     });
@@ -28,7 +28,7 @@ const BookLisitng = () => {
   return (
     <ListingTable
       title="Book Listing"
-      data={users}
+      data={books}
       columns={columns}
       onAdd={handleAddUser}
       onEdit={handleEditUser}
