@@ -5,14 +5,13 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import AdminDashboard from "../containers/Admin/AdminDashboard";
+
 import SignIn from "../containers/Auth/SignIn";
 import UserLisitng from "../containers/Admin/UserLisitng";
 import BookLisitng from "../containers/Admin/BookLisitng";
 import AddUser from "../containers/Admin/AddUser";
 import AddBook from "../containers/Admin/AddBook";
 
-import ViewProfile from "../containers/Admin/ViewProfile";
 import UsersWithBooksLisitng from "../containers/Shared/UsersWithBooksLisitng";
 
 import Layout from "../containers/Shared/Layout";
@@ -20,10 +19,12 @@ import IssueBook from "../containers/User/IssueBook";
 import PrivateRoute from "./PrivateRoutes";
 import PublicRoutes from "./PublicRoutes";
 import UserDashboard from "../containers/User/UserDashboard";
+import AdminDashboard from "../components/AdminDashboard";
+import ViewProfile from "../components/ViewProfile";
 
 const AppRoutes: React.FC = () => {
   const jsonString = localStorage.getItem("user");
-  const jsonObject = JSON.parse(jsonString);
+  const jsonObject = JSON.parse(jsonString || "{}");
   const role = jsonObject.role;
 
   console.log(role); // Output: user
@@ -118,7 +119,12 @@ const AppRoutes: React.FC = () => {
           element={
             <PrivateRoute>
               <Layout>
-                <ViewProfile />
+                <ViewProfile
+                  fullName="Muqeet Ullah"
+                  email="H5t2h@example.com"
+                  phoneNumber="1234567890"
+                  address="123 Main St, Anytown USA"
+                />
               </Layout>
             </PrivateRoute>
           }

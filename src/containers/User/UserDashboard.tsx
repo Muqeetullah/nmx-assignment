@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+
 import { useBook } from "../../context/BookContext";
 
-function UserDashboard() {
-  const navigate = useNavigate();
-  const { books } = useBook();
+const UserDashboard: React.FC = () => {
+  const { books, issueBook } = useBook();
 
-  const addBook = () => {
-    navigate("/admin/add-book");
+  const handleIssueBook = (bookId: number) => {
+    const user = { name: "John Doe", email: "johndoe@me.com" }; // Assuming the user is John Doe for this example
+    issueBook(bookId, user);
   };
 
   return (
@@ -16,14 +16,6 @@ function UserDashboard() {
         <h1 className="text-xl font-bold text-gray-900 mb-4 sm:mb-0">
           Books List
         </h1>
-        {/* <div>
-          <button
-            className="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={addBook}
-          >
-            Add Book
-          </button>
-        </div> */}
       </div>
       <div className="w-full overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500">
@@ -35,15 +27,6 @@ function UserDashboard() {
               <th scope="col" className="px-4 py-3 sm:px-6">
                 Author
               </th>
-              {/* <th
-                scope="col"
-                className="px-4 py-3 sm:px-6 hidden sm:table-cell"
-              >
-                Genre
-              </th>
-              <th scope="col" className="px-4 py-3 sm:px-6">
-                Price
-              </th> */}
               <th scope="col" className="px-4 py-3 sm:px-6">
                 <span className="sr-only">Edit</span>
               </th>
@@ -56,21 +39,17 @@ function UserDashboard() {
                   {book.name}
                 </td>
                 <td className="px-4 py-3 sm:px-6">{book.author}</td>
-                {/* <td className="px-4 py-3 sm:px-6 hidden sm:table-cell">
-                  {book.genre}
-                </td>
-                <td className="px-4 py-3 sm:px-6">{book.price}</td> */}
                 <td className="px-4 py-3 sm:px-6 text-right">
-                  <button
-                    className="font-medium text-blue-600 hover:underline"
-                    onClick={() =>
-                      navigate(`/admin/add-book`, {
-                        state: { book: book, status: "Edit" },
-                      })
-                    }
-                  >
-                    Issue Book
-                  </button>
+                  {!book.issued ? (
+                    <button
+                      className="font-medium text-blue-600 hover:underline"
+                      onClick={() => handleIssueBook(book.id)}
+                    >
+                      Issue Book
+                    </button>
+                  ) : (
+                    <span className="text-gray-500">Issued</span>
+                  )}
                 </td>
               </tr>
             ))}
@@ -79,6 +58,6 @@ function UserDashboard() {
       </div>
     </div>
   );
-}
+};
 
 export default UserDashboard;

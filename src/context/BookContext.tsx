@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
+import { toast } from "react-toastify";
 
 // Define Book interface with id property
 export interface Book {
@@ -7,6 +8,12 @@ export interface Book {
   author: string;
   genre: string;
   price: number;
+  issued: boolean;
+}
+
+interface User {
+  name: string;
+  email: string;
 }
 
 // Define Book context type with addBook and updateBook functions
@@ -14,6 +21,7 @@ interface BookContextType {
   books: Book[];
   addBook: (newBook: Book) => void;
   updateBook: (updatedBook: Book) => void;
+  issueBook: (bookId: number, user: User) => void;
 }
 
 // Initial list of books with ids
@@ -24,6 +32,7 @@ const initialBooks: Book[] = [
     author: "F. Scott Fitzgerald",
     genre: "Fiction",
     price: 10,
+    issued: false,
   },
   {
     id: 2,
@@ -31,6 +40,7 @@ const initialBooks: Book[] = [
     author: "Harper Lee",
     genre: "Classics",
     price: 12,
+    issued: false,
   },
   {
     id: 3,
@@ -38,6 +48,7 @@ const initialBooks: Book[] = [
     author: "J.K. Rowling",
     genre: "Fantasy",
     price: 15,
+    issued: false,
   },
 ];
 
@@ -46,6 +57,7 @@ const BookContext = createContext<BookContextType>({
   books: initialBooks,
   addBook: () => {},
   updateBook: () => {},
+  issueBook: () => {},
 });
 
 // Custom hook to use Book context
@@ -74,9 +86,23 @@ export const BookProvider: React.FC = ({ children }) => {
     );
     setBooks(updatedBooks);
   };
+  const issueBook = (bookId: number, user: User) => {
+    setBooks((prevBooks) => {
+      const book = prevBooks.find((book) => book.id === bookId);
+      if (book) {
+        toast.success(`Book titled "${book.name}" issued to ${user.name}`);
+        return prevBooks.map((book) =>
+          book.id === bookId ? { ...book, issued: true } : book
+        );
+      }
+      return prevBooks;
+    });
+  };
 
   return (
-    <BookContext.Provider value={{ books, addBook: addNewBook, updateBook }}>
+    <BookContext.Provider
+      value={{ books, addBook: addNewBook, updateBook, issueBook }}
+    >
       {children}
     </BookContext.Provider>
   );
