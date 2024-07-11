@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import BookFormUI from "../../components/BookFormUI";
 import { useBook } from "../../context/BookContext";
+import withErrorHandling from "../../HOC/ErrorHandling";
 
 interface Book {
   id?: number;
@@ -12,7 +13,7 @@ interface Book {
   genre: string;
   price: number;
 }
-
+const EnhancedBookFormUI = withErrorHandling(BookFormUI);
 const AddBook: React.FC = () => {
   const [newBook, setNewBook] = useState<Book>({
     id: undefined,
@@ -84,11 +85,10 @@ const AddBook: React.FC = () => {
   }, [location.state]);
 
   return (
-    <BookFormUI
+    <EnhancedBookFormUI
       newBook={newBook}
       handleInputChange={handleInputChange}
       handleAddOrUpdateBook={handleAddOrUpdateBook}
-      errors={errors}
       status={status}
     />
   );

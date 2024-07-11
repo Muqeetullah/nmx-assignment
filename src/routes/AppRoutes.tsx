@@ -59,8 +59,14 @@ const AppRoutes: React.FC = () => {
             },
           ],
         },
-        { path: "view-issued-book-list", element: <UsersWithBooksLisitng /> },
-        { path: "view-issued-book-list/issue-book", element: <IssueBook /> },
+
+        {
+          path: "view-issued-book-list",
+          children: [
+            { index: true, element: <UsersWithBooksLisitng /> },
+            { path: "issue-book", element: <IssueBook /> },
+          ],
+        },
       ],
     },
     {

@@ -10,7 +10,7 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout, isAuthenticated } = useAuth();
-  console.log(isAuthenticated);
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
