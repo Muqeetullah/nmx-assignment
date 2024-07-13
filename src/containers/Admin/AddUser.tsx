@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import UserFormUI from "../../components/UserFormUI";
 import { useUser } from "../../context/UserContext";
+import withErrorHandling from "../../HOC/ErrorHandling";
 
 interface User {
   id?: number;
@@ -14,6 +15,8 @@ interface User {
   age: number;
   gender: string;
 }
+
+const EnhancedUserFormUI = withErrorHandling(UserFormUI);
 
 const AddUser: React.FC = () => {
   const { addUser, updateUser } = useUser();
@@ -47,36 +50,6 @@ const AddUser: React.FC = () => {
 
   const handleAddOrUpdateUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let currentErrors = [];
-
-    if (!newUser.name) {
-      currentErrors.push("Name is required.");
-    }
-
-    if (!newUser.email) {
-      currentErrors.push("Email is required.");
-    }
-
-    if (!newUser.role) {
-      currentErrors.push("Role is required.");
-    }
-
-    if (!newUser.education) {
-      currentErrors.push("Education is required.");
-    }
-
-    if (newUser.age <= 0 || isNaN(newUser.age)) {
-      currentErrors.push("Age must be a positive number.");
-    }
-
-    if (!newUser.gender) {
-      currentErrors.push("Gender is required.");
-    }
-
-    if (currentErrors.length > 0) {
-      setErrors(currentErrors);
-      return;
-    }
 
     if (status === "Edit") {
       updateUser(newUser);
@@ -105,12 +78,11 @@ const AddUser: React.FC = () => {
   }, [location.state]);
 
   return (
-    <UserFormUI
+    <EnhancedUserFormUI
       newUser={newUser}
-      status={status}
-      errors={errors}
       handleInputChange={handleInputChange}
       handleAddOrUpdateUser={handleAddOrUpdateUser}
+      status={status}
     />
   );
 };

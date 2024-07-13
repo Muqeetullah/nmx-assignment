@@ -10,10 +10,15 @@ interface User {
   gender: string;
 }
 
+interface Error {
+  name: keyof User;
+  error: string;
+}
+
 interface UserFormUIProps {
   newUser: User;
   status: string;
-  errors: string[];
+  errors: Error[];
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement>,
     fieldName: keyof User
@@ -34,15 +39,6 @@ const UserFormUI: React.FC<UserFormUIProps> = ({
         <h1 className="text-xl font-bold text-gray-900 mb-6">
           {status === "Edit" ? "Edit User" : "Add a New User"}
         </h1>
-        {errors.length > 0 && (
-          <div className="mb-4">
-            {errors.map((error, index) => (
-              <div key={index} className="text-red-600">
-                {error}
-              </div>
-            ))}
-          </div>
-        )}
         <form
           onSubmit={handleAddOrUpdateUser}
           className="grid grid-cols-1 gap-4 md:grid-cols-2"
@@ -60,9 +56,19 @@ const UserFormUI: React.FC<UserFormUIProps> = ({
               name="name"
               value={newUser.name}
               onChange={(e) => handleInputChange(e, "name")}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+                errors.length > 0 &&
+                errors.some((error) => error.name === "name")
+                  ? "border-red-500"
+                  : "border-gray-300"
+              }`}
             />
+            {errors.length > 0 &&
+              errors.some((error) => error.name === "name") && (
+                <div className="text-red-600 mt-1 text-sm">
+                  {errors.find((err) => err.name === "name")?.error}
+                </div>
+              )}
           </div>
           <div>
             <label
@@ -77,9 +83,19 @@ const UserFormUI: React.FC<UserFormUIProps> = ({
               name="email"
               value={newUser.email}
               onChange={(e) => handleInputChange(e, "email")}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+                errors.length > 0 &&
+                errors.some((error) => error.name === "email")
+                  ? "border-red-500"
+                  : "border-gray-300"
+              }`}
             />
+            {errors.length > 0 &&
+              errors.some((error) => error.name === "email") && (
+                <div className="text-red-600 mt-1 text-sm">
+                  {errors.find((err) => err.name === "email")?.error}
+                </div>
+              )}
           </div>
           <div>
             <label
@@ -94,9 +110,19 @@ const UserFormUI: React.FC<UserFormUIProps> = ({
               name="role"
               value={newUser.role}
               onChange={(e) => handleInputChange(e, "role")}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+                errors.length > 0 &&
+                errors.some((error) => error.name === "role")
+                  ? "border-red-500"
+                  : "border-gray-300"
+              }`}
             />
+            {errors.length > 0 &&
+              errors.some((error) => error.name === "role") && (
+                <div className="text-red-600 mt-1 text-sm">
+                  {errors.find((err) => err.name === "role")?.error}
+                </div>
+              )}
           </div>
           <div>
             <label
@@ -111,9 +137,19 @@ const UserFormUI: React.FC<UserFormUIProps> = ({
               name="education"
               value={newUser.education}
               onChange={(e) => handleInputChange(e, "education")}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+                errors.length > 0 &&
+                errors.some((error) => error.name === "education")
+                  ? "border-red-500"
+                  : "border-gray-300"
+              }`}
             />
+            {errors.length > 0 &&
+              errors.some((error) => error.name === "education") && (
+                <div className="text-red-600 mt-1 text-sm">
+                  {errors.find((err) => err.name === "education")?.error}
+                </div>
+              )}
           </div>
           <div>
             <label
@@ -128,9 +164,19 @@ const UserFormUI: React.FC<UserFormUIProps> = ({
               name="age"
               value={newUser.age}
               onChange={(e) => handleInputChange(e, "age")}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+                errors.length > 0 &&
+                errors.some((error) => error.name === "age")
+                  ? "border-red-500"
+                  : "border-gray-300"
+              }`}
             />
+            {errors.length > 0 &&
+              errors.some((error) => error.name === "age") && (
+                <div className="text-red-600 mt-1 text-sm">
+                  {errors.find((err) => err.name === "age")?.error}
+                </div>
+              )}
           </div>
           <div>
             <label
@@ -145,9 +191,19 @@ const UserFormUI: React.FC<UserFormUIProps> = ({
               name="gender"
               value={newUser.gender}
               onChange={(e) => handleInputChange(e, "gender")}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+                errors.length > 0 &&
+                errors.some((error) => error.name === "gender")
+                  ? "border-red-500"
+                  : "border-gray-300"
+              }`}
             />
+            {errors.length > 0 &&
+              errors.some((error) => error.name === "gender") && (
+                <div className="text-red-600 mt-1 text-sm">
+                  {errors.find((err) => err.name === "gender")?.error}
+                </div>
+              )}
           </div>
           <div className="col-span-2 mt-6 flex justify-end">
             <button

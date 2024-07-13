@@ -37,30 +37,7 @@ const AddBook: React.FC = () => {
     setNewBook({ ...newBook, [fieldName]: value });
   };
 
-  const handleAddOrUpdateBook = () => {
-    let currentErrors = [];
-
-    if (!newBook.name) {
-      currentErrors.push("Book title is required.");
-    }
-
-    if (!newBook.author) {
-      currentErrors.push("Author is required.");
-    }
-
-    if (!newBook.genre) {
-      currentErrors.push("Genre is required.");
-    }
-
-    if (newBook.price <= 0 || isNaN(newBook.price)) {
-      currentErrors.push("Price must be a positive number.");
-    }
-
-    if (currentErrors.length > 0) {
-      setErrors(currentErrors);
-      return;
-    }
-
+  const handleAddOrUpdateBook = (newBook) => {
     if (status === "Edit") {
       updateBook(newBook);
     } else {
